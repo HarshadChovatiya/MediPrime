@@ -1,0 +1,98 @@
+﻿@using MediPrime.Models
+
+@model MediPrime.Models.Doctor_Patient
+
+@{
+    ViewBag.Title = "PatientDetails";
+}
+
+
+<h3><u>Hello <b>@ViewBag.patientname</b> Here's Your Report</u></h3>
+<br />
+@*<h3 style="color:red">@ViewBag.doctordetail.Hospital_Name</h3>*@
+<br />
+
+
+
+<table class="table">
+    @foreach (var item in @ViewBag.doctordetail)
+    {
+        int i = 1;
+            int totalfees = 0;
+       
+        <tr>
+            <td><h3 style="color:red">@item.Hospital_Name</h3></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><h4 style="color:blue">Doctor Name</h4></td>
+            <td><h4 style="color:blue">@item.Name</h4></td>
+        </tr>
+        @*<tr>
+            <td>Hospital Name</td>
+            <td>@item.Hospital_Name</td>
+        </tr>
+        <tr>
+            <td>Doctor Name</td>
+            <td>@item.Name</td>
+        </tr>*@
+        foreach (var items in @ViewBag.patientDetails)
+        {
+            if (@items.Doctor_Id == @item.Doctor_Id)
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Visit No.</td>
+                    <td>@i</td>
+                </tr>
+                <tr>
+                    <td>Diseases</td>
+                    <td>@items.Diseases</td>
+                </tr>
+                <tr>
+                    <td>Diabetes</td>
+                    <td>@items.Diabetes</td>
+                </tr>
+                <tr>
+                    <td>BloopPresure</td>
+                    <td>@items.BloodPresure</td>
+                </tr>
+                <tr>
+                    <td>Sugar</td>
+                    <td>@items.Suger</td>
+                </tr>
+                <tr>
+                    <td>ActiveDiagnosis</td>
+                    <td>@items.ActiveDiagnosis</td>
+                </tr>
+                <tr>
+                    <td>Fees(Rs.)</td>
+                    <td>@items.Fees</td>
+                </tr>
+                i = i + 1;
+                totalfees = totalfees + @items.Fees;
+            }
+        }
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><b>Total Fees(Rs.)</b></td>
+            <td><b>@totalfees</b></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+    }
+</table>
+
+
+
+
+
+<a class="btn btn-success" style="margin-bottom:10px" onclick="location.href='@Url.Action("PatientLogout","Home")'">Logout</a>

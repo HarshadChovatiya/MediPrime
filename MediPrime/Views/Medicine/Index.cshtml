@@ -1,0 +1,148 @@
+﻿
+@{
+    ViewBag.Title = "Medicine List";
+}
+
+<h2>Medicine Management System</h2>
+
+
+
+<a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddorEdit","Medicine")')">Add New</a>
+
+<table id="MedicineTable" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>Medicine Name</th>
+            <th>Medicine Catagory</th>
+            <th>Medicine Form</th>
+            <th>Medicine Doserate</th>
+            <th>Medicine Class</th>
+            <th></th>
+        </tr>
+    </thead>
+
+</table>
+
+<a class="btn btn-success" style="margin-bottom:10px" onclick="location.href='@Url.Action("AdminLogout","Home")'">Logout</a>
+
+<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+@section scripts
+{
+    <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+
+        var Popup, dataTable,Fordiv;
+         $(document).ready(function () {
+
+             //$("MedicineTable").hide();
+           dataTable = $("#MedicineTable").DataTable({
+                "ajax": {
+                    "url": "/Medicine/GetData",
+                    "type": "GET",
+                    "datatype" : "json"
+                },
+                "columns": [
+                    { "data": "medicine_name" },
+                    { "data": "medicine_catagory"},
+                    { "data": "medicine_form"},
+                    { "data": "medicine_doserate"},
+                    { "data": "medicine_class" },
+                    {
+                        "data": "medicine_id", "render": function (data) {
+                            return "<a class='btn btn-primary btn-sm' onclick=PopupForm('@Url.Action("AddorEdit","Medicine")/"+ data + "') style = 'margin-right:5px' > Edit</a > <a class='btn btn-danger btn-sm' onclick= Delete('"+ data + "')>Delete</a>";
+                        },
+                        "orderable": false,
+                        "searchable": false,
+                        "width" : "150px"
+
+                    }
+                ],
+                "language": {
+                    "emptyTable" : "No Data Found. Please click on <b>Add New</b> Button"
+                }
+
+            })
+         });
+        $("MedicineTable").show();
+        function PopupForm(url) {
+            Fordiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    Fordiv.html(response);
+
+                    Popup = Fordiv.dialog({
+                        autoOpen: true,
+                        title: "Fill Medicine Details",
+                        height: 800,
+                        width: 400,
+                        close: function () {
+                            Popup.dialog('destroy').remove();
+
+                        }
+
+
+
+                    });
+
+            })
+        }
+
+        function SubmitForm(form)
+        {
+            $.ajax({
+                type: "POST",
+                url: form.action,
+                data: $(form).serialize(),
+                success: function (data) {
+                    if (data.success) {
+                        Popup.dialog('close');
+                        dataTable.ajax.reload();
+                        // $('#MedicineTable').DataTable().ajax.reload();
+                       // dataTable.reload();
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className : "success"
+                        })
+                    }
+
+                }
+
+            });
+            return false;
+
+        }
+
+        function Delete(id) {
+            if (confirm("Are you sure to Delete this Medicine Record ?"));
+            {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("Delete","Medicine")/" + id,
+                    success: function (data) {
+                        if (data.success) {
+                            // Popup.dialog('close');
+                             dataTable.ajax.reload();
+                         //$('#MedicineTable').DataTable().ajax.reload();
+                        //dataTable.reload();
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className : "success"
+                        })
+                        }
+
+                    }
+
+                });
+            }
+        }
+
+
+    </script>
+
+
+}
+
+
+

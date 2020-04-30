@@ -1,0 +1,15 @@
+﻿
+@{
+	ViewBag.Title = "MedicoPrime";
+}
+
+<body style="background-color:antiquewhite">
+	<div style="margin-top:250px; margin-left:350px; margin-bottom:290px">
+		<a class="btn btn-success" onclick="location.href='@Url.Action("AdminLogin","Home")'">Login As Admin</a>
+		<a class="btn btn-primary" onclick="location.href='@Url.Action("DoctorLogin","Home")'">Login As Doctor</a>
+		<a class="btn btn-warning" onclick="location.href='@Url.Action("PatientLogin","Home")'">Login As Patient</a>
+	</div>
+</body>
+
+<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+
